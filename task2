@@ -1,0 +1,109 @@
+Gamma Correction for Image Enhancement
+Overview
+This Python script applies Gamma Correction to an image using OpenCV and NumPy. Gamma correction is a non-linear image enhancement technique that adjusts the brightness and contrast of an image, making details more visible
+code:
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def gamma_correction(image, gamma=1.0):
+    invGamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
+    return cv2.LUT(image, table)
+
+# Load image
+image = cv2.imread('/content/Picture1.png')
+gamma_corrected = gamma_correction(image, gamma=2.0)
+
+# Display the result
+plt.figure(figsize=(10,5))
+plt.subplot(1, 2, 1)
+plt.title('Original Image')
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.subplot(1, 2, 2)
+plt.title('Gamma Corrected Image')
+plt.imshow(cv2.cvtColor(gamma_corrected, cv2.COLOR_BGR2RGB))
+plt.show()
+
+Contrast Enhancement Using CLAHE
+Overview
+This Python script applies Contrast Limited Adaptive Histogram Equalization (CLAHE) to an image using OpenCV. CLAHE is an advanced image-processing technique that enhances local contrast while preventing over-amplification of noise. It is particularly useful in medical imaging, low-light conditions, and image preprocessing tasks.
+code:
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def gamma_correction(image, gamma=1.0):
+    invGamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
+    return cv2.LUT(image, table)
+
+# Load image
+image = cv2.imread('/content/Picture1.png')
+gamma_corrected = gamma_correction(image, gamma=2.0)
+
+# Display the result
+plt.figure(figsize=(10,5))
+plt.subplot(1, 2, 1)
+plt.title('Original Image')
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.subplot(1, 2, 2)
+plt.title('Gamma Corrected Image')
+plt.imshow(cv2.cvtColor(gamma_corrected, cv2.COLOR_BGR2RGB))
+plt.show()
+
+Averaging Filter for Image Smoothing
+Overview
+This script applies an Averaging Filter (Blurring) to an image using OpenCV. The filter smooths the image by averaging pixel values in a 5×5 kernel, reducing noise and minor details.
+def clahe(image):
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    if image is not None: # Check if image was loaded successfully
+        if len(image.shape) == 2:
+            return clahe.apply(image)
+        elif len(image.shape) == 3:
+            channels = cv2.split(image)
+            clahe_channels = [clahe.apply(ch) for ch in channels]
+            return cv2.merge(clahe_channels)
+    else:
+        return None # Handle the case where image is None
+
+# Load image. Make sure 'image_path' is correct.
+image_path = '/content/Picture1.png' # Replace with your actual image path
+image = cv2.imread(image_path, 0)
+clahe_image = clahe(image)
+
+# Display the result
+if clahe_image is not None: # Check if CLAHE was applied successfully
+    plt.figure(figsize=(10,5))
+    plt.subplot(1, 2, 1)
+    plt.title('Original Image')
+    plt.imshow(image, cmap='gray')
+    plt.subplot(1, 2, 2)
+    plt.title('CLAHE Image')
+    plt.imshow(clahe_image, cmap='gray')
+    plt.show()
+else:
+    print("Failed to load or apply CLAHE to the image. Check the file path.")
+
+Unsharp Masking for Image Enhancement
+Overview
+This script enhances image sharpness using Unsharp Masking in OpenCV. It highlights edges and fine details, making the image clearer.
+code:
+
+import cv2 as cv
+import numpy as np
+from matplotlib import pyplot as plt
+
+image = cv.imread('/content/Picture1.png')
+
+avg = cv.blur(image,(5,5))
+
+# Display the result
+plt.figure(figsize=(10,5))
+plt.subplot(1, 2, 1)
+plt.title('Original Image')
+plt.imshow(cv.cvtColor(image, cv.COLOR_BGR2RGB))
+plt.subplot(1, 2, 2)
+plt.title('Averaging filtered Image')
+plt.imshow(cv.cvtColor(avg, cv.COLOR_BGR2RGB))
+plt.show()
