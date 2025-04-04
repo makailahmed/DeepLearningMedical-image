@@ -129,3 +129,116 @@ cv2_imshow(output)
 
 
 ==================================================================================
+
+
+1. Gamma Correction (Brightness & Contrast Adjustment)
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the image
+image_path = "/content/Picture1.png"
+img = cv2.imread(image_path)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for display
+
+# Function: Gamma Correction
+def gamma_correction(image, gamma=1.5):
+    inv_gamma = 1.0 / gamma
+    table = np.array([(i / 255.0) ** inv_gamma * 255 for i in range(256)]).astype("uint8")
+    return cv2.LUT(image, table)
+
+# Apply Gamma Correction
+gamma_corrected = gamma_correction(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(gamma_corrected), plt.title("Gamma Correction"), plt.axis("off")
+plt.show()
+=====================================================================================================
+
+2.CLAHE (Contrast Limited Adaptive Histogram Equalization)
+# Function: CLAHE (Contrast Enhancement)
+def apply_clahe(image):
+    lab = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    l = clahe.apply(l)
+    lab = cv2.merge((l, a, b))
+    return cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+
+# Apply CLAHE
+clahe_applied = apply_clahe(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(clahe_applied), plt.title("CLAHE"), plt.axis("off")
+plt.show()
+
+===============================
+3.Averaging Filter (Blurring to Reduce Noise)
+# Function: Averaging Filter (Blurring)
+def averaging_filter(image, kernel_size=5):
+    return cv2.blur(image, (kernel_size, kernel_size))
+
+# Apply Averaging Filter
+blurred = averaging_filter(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(blurred), plt.title("Averaging Filter (Blur)"), plt.axis("off")
+plt.show()
+=======================================================
+4.Unsharp Masking (Sharpening)
+# Function: Unsharp Masking (Sharpening)
+def unsharp_mask(image, sigma=1.0, strength=1.5):
+    blurred = cv2.GaussianBlur(image, (0, 0), sigma)
+    sharpened = cv2.addWeighted(image, 1 + strength, blurred, -strength, 0)
+    return sharpened
+
+# Apply Unsharp Masking
+sharpened = unsharp_mask(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(sharpened), plt.title("Unsharp Masking (Sharpening)"), plt.axis("off")
+plt.show()
+===========================================
+5.Low-Pass Filtering (Smoothing)
+# Function: Low-Pass Filter (Smoothing)
+def low_pass_filter(image, kernel_size=5):
+    return cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
+
+# Apply Low-Pass Filtering
+low_pass = low_pass_filter(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(low_pass), plt.title("Low-Pass Filtering (Smoothing)"), plt.axis("off")
+plt.show()
+
+
+=============================================
+6.High-Pass Filtering (Edge Enhancement)
+# Function: High-Pass Filter (Edge Enhancement)
+def high_pass_filter(image):
+    kernel = np.array([[-1, -1, -1],
+                       [-1,  8, -1],
+                       [-1, -1, -1]])
+    return cv2.filter2D(image, -1, kernel)
+
+# Apply High-Pass Filtering
+high_pass = high_pass_filter(img)
+
+# Display Results
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(high_pass), plt.title("High-Pass Filtering (Edge Enhancement)"), plt.axis("off")
+plt.show()
+
+
