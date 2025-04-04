@@ -25,10 +25,8 @@ plt.title('Gamma Corrected Image')
 plt.imshow(cv2.cvtColor(gamma_corrected, cv2.COLOR_BGR2RGB))
 plt.show()
 
-Contrast Enhancement Using CLAHE
-Overview
-This Python script applies Contrast Limited Adaptive Histogram Equalization (CLAHE) to an image using OpenCV. CLAHE is an advanced image-processing technique that enhances local contrast while preventing over-amplification of noise. It is particularly useful in medical imaging, low-light conditions, and image preprocessing tasks.
-code:
+
+=====================================================
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -52,9 +50,8 @@ plt.title('Gamma Corrected Image')
 plt.imshow(cv2.cvtColor(gamma_corrected, cv2.COLOR_BGR2RGB))
 plt.show()
 
-Averaging Filter for Image Smoothing
-Overview
-This script applies an Averaging Filter (Blurring) to an image using OpenCV. The filter smooths the image by averaging pixel values in a 5×5 kernel, reducing noise and minor details.
+
+========================================================
 def clahe(image):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     if image is not None: # Check if image was loaded successfully
@@ -85,11 +82,8 @@ if clahe_image is not None: # Check if CLAHE was applied successfully
 else:
     print("Failed to load or apply CLAHE to the image. Check the file path.")
 
-Unsharp Masking for Image Enhancement
-Overview
-This script enhances image sharpness using Unsharp Masking in OpenCV. It highlights edges and fine details, making the image clearer.
-code:
 
+======================================================================================
 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
@@ -107,3 +101,31 @@ plt.subplot(1, 2, 2)
 plt.title('Averaging filtered Image')
 plt.imshow(cv.cvtColor(avg, cv.COLOR_BGR2RGB))
 plt.show()
+
+
+==================================================================================
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image
+image = cv2.imread('/content/Picture1.png')
+
+# Convert the image to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Apply Gaussian blur to the grayscale image
+blurred_image = cv2.GaussianBlur(gray_image, (0, 0), 3)
+
+# Perform unsharp masking
+unsharp_mask = cv2.addWeighted(gray_image, 2.5, blurred_image, -1.5, 0)
+
+# Convert the result back to BGR
+output = cv2.cvtColor(unsharp_mask, cv2.COLOR_GRAY2BGR)
+
+# Display the original and enhanced images
+cv2_imshow(image)
+cv2_imshow(output)
+
+
+==================================================================================
