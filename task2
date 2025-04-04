@@ -1,3 +1,6 @@
+1.Explore two image enhancement techniques from each methods and apply them to a specific medical image.
+
+
 Gamma Correction for Image Enhancement
 Overview
 This Python script applies Gamma Correction to an image using OpenCV and NumPy. Gamma correction is a non-linear image enhancement technique that adjusts the brightness and contrast of an image, making details more visible
