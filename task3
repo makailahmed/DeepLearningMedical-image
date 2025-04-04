@@ -1,0 +1,67 @@
+ 1.Vertical Flip
+import cv2
+import matplotlib.pyplot as plt
+
+# Load Image
+image_path = "/content/Picture1.png"
+img = cv2.imread(image_path)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert to RGB
+
+# Apply Vertical Flip
+vertical_flip = cv2.flip(img, 0)
+
+# Display Images
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1), plt.imshow(img), plt.title("Original"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(vertical_flip), plt.title("Vertical Flip"), plt.axis("off")
+plt.show()
+
+=====================================
+2.Horizontal Flip (After Vertical Flip)
+# Apply Horizontal Flip after Vertical Flip
+horizontal_flip = cv2.flip(vertical_flip, 1)
+
+# Display Images
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1), plt.imshow(vertical_flip), plt.title("Vertical Flip"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(horizontal_flip), plt.title("Horizontal Flip"), plt.axis("off")
+plt.show()
+================================================
+3.Rotate Image (After Flip)
+import numpy as np
+
+def rotate_image(image, angle=45):
+    h, w = image.shape[:2]
+    center = (w // 2, h // 2)
+    matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+    return cv2.warpAffine(image, matrix, (w, h))
+
+# Apply Rotation
+rotated_image = rotate_image(horizontal_flip)
+
+# Display Images
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1), plt.imshow(horizontal_flip), plt.title("Flipped Image"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(rotated_image), plt.title("Rotated 45°"), plt.axis("off")
+plt.show()
+============================================================================================================
+4.30% Zooming (Focus on Tumor)
+def zoom_image(image, zoom_factor=1.3):
+    h, w = image.shape[:2]
+    new_h, new_w = int(h / zoom_factor), int(w / zoom_factor)
+
+    # Define the center crop region
+    start_x, start_y = (w - new_w) // 2, (h - new_h) // 2
+    cropped = image[start_y:start_y + new_h, start_x:start_x + new_w]
+
+    # Resize back to original size
+    return cv2.resize(cropped, (w, h), interpolation=cv2.INTER_LINEAR)
+
+# Apply Zooming
+zoomed_image = zoom_image(rotated_image, zoom_factor=1.3)
+
+# Display Images
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1), plt.imshow(rotated_image), plt.title("Rotated Image"), plt.axis("off")
+plt.subplot(1,2,2), plt.imshow(zoomed_image), plt.title("30% Zoom (Tumor Focus)"), plt.axis("off")
+plt.show()
